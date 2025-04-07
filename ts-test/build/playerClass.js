@@ -70,4 +70,7 @@ export class Player {
     changeScared() {
         this.scared = !this.scared;
     }
+    setToScared() {
+        this.scared = true;
+    }
 }

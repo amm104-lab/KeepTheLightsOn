@@ -38,12 +38,12 @@ export class Map{
     }
 
     darkness() {
-        this.user.changeScared();
+        // this.user.changeScared();
+        this.user.setToScared();
         setTimeout( () => {
             if(m.route.get()==="/darkness"){
                 this.user.goThroughDoor("gameOver");
             }
-            console.log(m.route.get());
         },10000)
         return m("div",{class:"darkness"},
             m("div",{class:"abyss"},[
@@ -270,8 +270,10 @@ export class Map{
     darkRed(){
         let text: string;
         if(this.user.getScared()){
+            console.log("player is scared")
             text= "Find the Toolkit."}
         else{
+            console.log("player is fine")
             text="Are you sure about this?"}
         if(this.user.getNorth()){
             return [m("div",{class:"darkRed"},

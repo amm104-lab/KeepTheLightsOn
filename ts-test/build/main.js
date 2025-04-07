@@ -1659,6 +1659,9 @@
     changeScared() {
       this.scared = !this.scared;
     }
+    setToScared() {
+      this.scared = true;
+    }
   };
 
   // build/mapClass.js
@@ -1695,7 +1698,8 @@
       ]);
     }
     darkness() {
-      this.user.changeScared();
+      this.user.setToScared();
+      console.log("changed Scared");
       setTimeout(() => {
         if (import_mithril2.default.route.get() === "/darkness") {
           this.user.goThroughDoor("gameOver");
@@ -2009,8 +2013,10 @@
     darkRed() {
       let text;
       if (this.user.getScared()) {
+        console.log("player is scared");
         text = "Find the Toolkit.";
       } else {
+        console.log("player is fine");
         text = "Are you sure about this?";
       }
       if (this.user.getNorth()) {

@@ -102,4 +102,8 @@ export class Player{
     changeScared():void {
         this.scared = !this.scared;
     }
+
+    setToScared():void {
+        this.scared = true;
+    }
 }

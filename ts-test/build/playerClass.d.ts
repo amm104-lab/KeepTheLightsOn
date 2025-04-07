@@ -19,4 +19,5 @@ export declare class Player {
     changeToolKit(): void;
     changeNorth(): void;
     changeScared(): void;
+    setToScared(): void;
 }
