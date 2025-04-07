@@ -1612,18 +1612,18 @@
     }
     turnAroundTo(room) {
       this.changeNorth();
-      import_mithril.default.route.set(`/${room}`);
+      this.goThroughDoor(room);
     }
     checkDoor() {
       if (this.getToolKit()) {
-        import_mithril.default.route.set("/blackToolSet");
+        this.goThroughDoor("blackToolSet");
       } else {
         if (this.getKey() && this.getOil()) {
           this.goThroughDoor("darkRed");
         } else if (this.getKey()) {
-          import_mithril.default.route.set("/blackNoOil");
+          this.goThroughDoor("blackNoOil");
         } else {
-          import_mithril.default.route.set("/blackNoKey");
+          this.goThroughDoor("blackNoKey");
         }
       }
     }
@@ -1900,7 +1900,7 @@
               class: "item",
               onclick: () => {
                 this.user.changeKey();
-                import_mithril2.default.route.set("darkBlueObtained");
+                this.user.goThroughDoor("darkBlueObtained");
               }
             }, "\u{1F511}")),
             (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
@@ -2011,10 +2011,8 @@
     darkRed() {
       let text;
       if (this.user.getScared()) {
-        console.log("player is scared");
         text = "Find the Toolkit.";
       } else {
-        console.log("player is fine");
         text = "Are you sure about this?";
       }
       if (this.user.getNorth()) {

@@ -29,7 +29,6 @@ export class Map {
         ]);
     }
     darkness() {
-        // this.user.changeScared();
         this.user.setToScared();
         setTimeout(() => {
             if (m.route.get() === "/darkness") {
@@ -142,7 +141,7 @@ export class Map {
                     m("div", { class: "darkBlue" }, m("button", { class: "item",
                         onclick: () => {
                             this.user.changeKey();
-                            m.route.set("darkBlueObtained");
+                            this.user.goThroughDoor("darkBlueObtained");
                         }
                     }, "🔑")),
                     m("div", m("button", { class: "turn", onclick: () => { this.user.turnAroundTo("darkBlue"); } }, "Turn South"))
@@ -194,11 +193,9 @@ export class Map {
     darkRed() {
         let text;
         if (this.user.getScared()) {
-            console.log("player is scared");
             text = "Find the Toolkit.";
         }
         else {
-            console.log("player is fine");
             text = "Are you sure about this?";
         }
         if (this.user.getNorth()) {

@@ -20,21 +20,21 @@ export class Player {
     }
     turnAroundTo(room) {
         this.changeNorth();
-        m.route.set(`/${room}`);
+        this.goThroughDoor(room);
     }
     checkDoor() {
         if (this.getToolKit()) {
-            m.route.set("/blackToolSet");
+            this.goThroughDoor("blackToolSet");
         }
         else {
             if (this.getKey() && this.getOil()) {
                 this.goThroughDoor("darkRed");
             }
             else if (this.getKey()) {
-                m.route.set("/blackNoOil");
+                this.goThroughDoor("blackNoOil");
             }
             else {
-                m.route.set("/blackNoKey");
+                this.goThroughDoor("blackNoKey");
             }
         }
     }

@@ -35,22 +35,22 @@ export class Player{
 
     turnAroundTo(room:String){
         this.changeNorth()
-        m.route.set(`/${room}`)
+        this.goThroughDoor(room)
     }
 
     checkDoor(){
         if(this.getToolKit()){
-            m.route.set("/blackToolSet")
+            this.goThroughDoor("blackToolSet")
         }
         else{
             if(this.getKey() && this.getOil()){
                 this.goThroughDoor("darkRed");
             }
             else if(this.getKey()){
-                m.route.set("/blackNoOil")
+                this.goThroughDoor("blackNoOil")
             }
             else {
-                m.route.set("/blackNoKey")
+                this.goThroughDoor("blackNoKey")
             }
         }
     }
@@ -97,10 +97,6 @@ export class Player{
 
     changeNorth():void {
         this.north = !this.north;
-    }
-
-    changeScared():void {
-        this.scared = !this.scared;
     }
 
     setToScared():void {
