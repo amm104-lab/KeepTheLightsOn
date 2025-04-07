@@ -8,53 +8,53 @@ const user = new Player(false,false,false,true,false);
 
 const map = new Map(user);
 
-let start = {view: function(){return map.start()}}
+let start = {view: () => {return map.start()}};
 
-let gameOver = {view: function(){return map.gameOver()}}
+let gameOver = {view:() => {return map.gameOver()}};
 
-let darkness = {view: function(){return map.darkness()}}
+let darkness = {view:() => {return map.darkness()}};
 
-let goodEnd = {view: function(){return map.goodEnd()}}
+let goodEnd = {view:() => {return map.goodEnd()}};
 
-let white = {view: function (){return map.white()}}
+let white = {view: () => {return map.white()}};
 
-let black = {view: function (){return map.black()}}
+let black = {view: () => {return map.black()}};
 
-let blackNoKey = {view: function (){return map.blackNoKey()}}
+let blackNoKey = {view: () => {return map.blackNoKey()}};
 
-let blackNoOil = {view: function (){return map.blackNoOil()}}
+let blackNoOil = {view: () => {return map.blackNoOil()}};
 
-let blackToolSet = {view: function (){return map.blackToolSet()}}
+let blackToolSet = {view: () => {return map.blackToolSet()}};
 
-let blue = {view: function (){return map.blue()}}
+let blue = {view: () => {return map.blue()}};
 
-let lightBlue = {view: function (){return map.lightBlue()}}
+let lightBlue = {view: () => {return map.lightBlue()}};
 
-let darkBlue = {view: function (){return map.darkBlue()}}
+let darkBlue = {view: () => {return map.darkBlue()}};
 
-let darkBlueObtained = {view: function (){return map.darkBlueObtained()}}
+let darkBlueObtained = {view: () => {return map.darkBlueObtained()}};
 
-let red = {view: function (){return map.red()}}
+let red = {view: () => {return map.red()}};
 
-let lightRed = {view: function (){return map.lightRed()}}
+let lightRed = {view: () => {return map.lightRed()}};
 
-let darkRed = {view: function (){return map.darkRed()}}
+let darkRed = {view: () => {return map.darkRed()}};
 
-let purple = {view: function (){return map.purple()}}
+let purple = {view: () => {return map.purple()}};
 
-let lightPurple = {view: function (){return map.lightPurple()}}
+let lightPurple = {view: () => {return map.lightPurple()}};
 
-let darkPurple = {view: function (){return map.darkPurple()}}
+let darkPurple = {view: () => {return map.darkPurple()}};
 
-let yellow = {view: function (){return map.yellow()}}
+let yellow = {view: () => {return map.yellow()}};
 
-let orange = {view: function (){return map.orange()}}
+let orange = {view: () => {return map.orange()}};
 
-let orangeObtained = {view: function (){return map.orangeObtained()}}
+let orangeObtained = {view: () => {return map.orangeObtained()}};
 
-let green = {view: function (){return map.green()}}
+let green = {view: () => {return map.green()}};
 
-let greenObtained = {view: function (){return map.greenObtained()}}
+let greenObtained = {view: () => {return map.greenObtained()}};
 
 m.route(root,"/start", {
     "/start":start,

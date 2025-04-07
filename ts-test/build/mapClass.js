@@ -31,12 +31,10 @@ export class Map {
     darkness() {
         // this.user.changeScared();
         this.user.setToScared();
-        console.log("changed Scared");
         setTimeout(() => {
             if (m.route.get() === "/darkness") {
                 this.user.goThroughDoor("gameOver");
             }
-            console.log(m.route.get());
         }, 10000);
         return m("div", { class: "darkness" }, m("div", { class: "abyss" }, [
             m("button", { class: "hiddenSwitch", onclick: () => {

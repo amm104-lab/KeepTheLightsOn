@@ -1699,12 +1699,10 @@
     }
     darkness() {
       this.user.setToScared();
-      console.log("changed Scared");
       setTimeout(() => {
         if (import_mithril2.default.route.get() === "/darkness") {
           this.user.goThroughDoor("gameOver");
         }
-        console.log(import_mithril2.default.route.get());
       }, 1e4);
       return (0, import_mithril2.default)("div", { class: "darkness" }, (0, import_mithril2.default)("div", { class: "abyss" }, [
         (0, import_mithril2.default)("button", { class: "hiddenSwitch", onclick: () => {
@@ -2298,76 +2296,76 @@
   var root2 = document.body;
   var user = new Player(false, false, false, true, false);
   var map = new Map(user);
-  var start = { view: function() {
+  var start = { view: () => {
     return map.start();
   } };
-  var gameOver = { view: function() {
+  var gameOver = { view: () => {
     return map.gameOver();
   } };
-  var darkness = { view: function() {
+  var darkness = { view: () => {
     return map.darkness();
   } };
-  var goodEnd = { view: function() {
+  var goodEnd = { view: () => {
     return map.goodEnd();
   } };
-  var white = { view: function() {
+  var white = { view: () => {
     return map.white();
   } };
-  var black = { view: function() {
+  var black = { view: () => {
     return map.black();
   } };
-  var blackNoKey = { view: function() {
+  var blackNoKey = { view: () => {
     return map.blackNoKey();
   } };
-  var blackNoOil = { view: function() {
+  var blackNoOil = { view: () => {
     return map.blackNoOil();
   } };
-  var blackToolSet = { view: function() {
+  var blackToolSet = { view: () => {
     return map.blackToolSet();
   } };
-  var blue = { view: function() {
+  var blue = { view: () => {
     return map.blue();
   } };
-  var lightBlue = { view: function() {
+  var lightBlue = { view: () => {
     return map.lightBlue();
   } };
-  var darkBlue = { view: function() {
+  var darkBlue = { view: () => {
     return map.darkBlue();
   } };
-  var darkBlueObtained = { view: function() {
+  var darkBlueObtained = { view: () => {
     return map.darkBlueObtained();
   } };
-  var red = { view: function() {
+  var red = { view: () => {
     return map.red();
   } };
-  var lightRed = { view: function() {
+  var lightRed = { view: () => {
     return map.lightRed();
   } };
-  var darkRed = { view: function() {
+  var darkRed = { view: () => {
     return map.darkRed();
   } };
-  var purple = { view: function() {
+  var purple = { view: () => {
     return map.purple();
   } };
-  var lightPurple = { view: function() {
+  var lightPurple = { view: () => {
     return map.lightPurple();
   } };
-  var darkPurple = { view: function() {
+  var darkPurple = { view: () => {
     return map.darkPurple();
   } };
-  var yellow = { view: function() {
+  var yellow = { view: () => {
     return map.yellow();
   } };
-  var orange = { view: function() {
+  var orange = { view: () => {
     return map.orange();
   } };
-  var orangeObtained = { view: function() {
+  var orangeObtained = { view: () => {
     return map.orangeObtained();
   } };
-  var green = { view: function() {
+  var green = { view: () => {
     return map.green();
   } };
-  var greenObtained = { view: function() {
+  var greenObtained = { view: () => {
     return map.greenObtained();
   } };
   import_mithril3.default.route(root2, "/start", {

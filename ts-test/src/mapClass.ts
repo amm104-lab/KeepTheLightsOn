@@ -10,7 +10,7 @@ export class Map{
         this.user = user;
     }
 
-    start() {
+    start(){
             return m("div",{class:"startBox"}, [
                 m("h1",{class:"title"},"←Attention!⤛"),
                 m("p",{class:"description"}, "♦ Click on a door to go to the next room ♦"),
@@ -28,7 +28,7 @@ export class Map{
         root.removeAttribute("ID");
     }
 
-    gameOver() {
+    gameOver(){
         return m("div",{class:"endBox"}, [
             m("h1", {class:"title"}, "⤜You-died→"),
             m("p",{class:"description"}, "♦ I warned you ♦"),
@@ -37,7 +37,7 @@ export class Map{
         ])
     }
 
-    darkness() {
+    darkness(){
         // this.user.changeScared();
         this.user.setToScared();
         setTimeout( () => {
@@ -461,7 +461,6 @@ export class Map{
                 m("button",{class:"turn", onclick: () => {this.user.turnAroundTo("green")}}, "Turn South")
             )]
     }
-
 
 }
 
