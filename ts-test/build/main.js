@@ -1017,9 +1017,9 @@
         var path = template.slice(0, pathEnd);
         var query = {};
         Object.assign(query, params);
-        var resolved = path.replace(/:([^\/\.-]+)(\.{3})?/g, function(m2, key, variadic) {
+        var resolved = path.replace(/:([^\/\.-]+)(\.{3})?/g, function(m3, key, variadic) {
           delete query[key];
-          if (params[key] == null) return m2;
+          if (params[key] == null) return m3;
           return variadic ? params[key] : encodeURIComponent(String(params[key]));
         });
         var newQueryIndex = resolved.indexOf("?");
@@ -1291,8 +1291,8 @@
           // don't also accidentally escape `-` and make it harder to detect it to
           // ban it from template parameters.
           /:([^\/.-]+)(\.{3}|\.(?!\.)|-)?|[\\^$*+.()|\[\]{}]/g,
-          function(m2, key, extra) {
-            if (key == null) return "\\" + m2;
+          function(m3, key, extra) {
+            if (key == null) return "\\" + m3;
             keys.push({ k: key, r: extra === "..." });
             if (extra === "...") return "(.*)";
             if (extra === ".") return "([^/]+)\\.";
@@ -1346,7 +1346,7 @@
     "node_modules/mithril/api/router.js"(exports, module) {
       "use strict";
       var Vnode = require_vnode();
-      var m2 = require_hyperscript();
+      var m3 = require_hyperscript();
       var buildPathname = require_build2();
       var parsePathname = require_parse2();
       var compileTemplate = require_compileTemplate();
@@ -1500,7 +1500,7 @@
         route.prefix = "#!";
         route.Link = {
           view: function(vnode) {
-            var child = m2(
+            var child = m3(
               vnode.attrs.selector || "a",
               censor(vnode.attrs, ["options", "params", "selector", "onclick"]),
               vnode.children
@@ -1563,128 +1563,195 @@
       var request = require_request2();
       var mountRedraw = require_mount_redraw2();
       var domFor = require_domFor();
-      var m2 = function m3() {
+      var m3 = function m4() {
         return hyperscript.apply(this, arguments);
       };
-      m2.m = hyperscript;
-      m2.trust = hyperscript.trust;
-      m2.fragment = hyperscript.fragment;
-      m2.Fragment = "[";
-      m2.mount = mountRedraw.mount;
-      m2.route = require_route();
-      m2.render = require_render2();
-      m2.redraw = mountRedraw.redraw;
-      m2.request = request.request;
-      m2.parseQueryString = require_parse();
-      m2.buildQueryString = require_build();
-      m2.parsePathname = require_parse2();
-      m2.buildPathname = require_build2();
-      m2.vnode = require_vnode();
-      m2.censor = require_censor();
-      m2.domFor = domFor.domFor;
-      module.exports = m2;
+      m3.m = hyperscript;
+      m3.trust = hyperscript.trust;
+      m3.fragment = hyperscript.fragment;
+      m3.Fragment = "[";
+      m3.mount = mountRedraw.mount;
+      m3.route = require_route();
+      m3.render = require_render2();
+      m3.redraw = mountRedraw.redraw;
+      m3.request = request.request;
+      m3.parseQueryString = require_parse();
+      m3.buildQueryString = require_build();
+      m3.parsePathname = require_parse2();
+      m3.buildPathname = require_build2();
+      m3.vnode = require_vnode();
+      m3.censor = require_censor();
+      m3.domFor = domFor.domFor;
+      module.exports = m3;
     }
   });
 
   // build/index.js
+  var import_mithril2 = __toESM(require_mithril());
+
+  // build/playerClass.js
   var import_mithril = __toESM(require_mithril());
-  var root = document.body;
-  var player = {
-    key: false,
-    oil: false,
-    north: true,
-    toolSet: false,
-    scared: false
+  var Player = class {
+    constructor(key, oil, toolSet, north, scared) {
+      this.key = key;
+      this.oil = oil;
+      this.toolKit = toolSet;
+      this.north = north;
+      this.scared = scared;
+    }
+    reset() {
+      this.key = false;
+      this.oil = false;
+      this.toolKit = false;
+      this.north = true;
+      this.scared = false;
+    }
+    goThroughDoor(nextRoom) {
+      import_mithril.default.route.set(`/${nextRoom}`);
+    }
+    turnAroundTo(room) {
+      this.changeNorth();
+      import_mithril.default.route.set(`/${room}`);
+    }
+    checkDoor() {
+      if (this.getToolKit()) {
+        import_mithril.default.route.set("/blackToolSet");
+      } else {
+        if (this.getKey() && this.getOil()) {
+          this.goThroughDoor("darkRed");
+        } else if (this.getKey()) {
+          import_mithril.default.route.set("/blackNoOil");
+        } else {
+          import_mithril.default.route.set("/blackNoKey");
+        }
+      }
+    }
+    //Get
+    getKey() {
+      return this.key;
+    }
+    getOil() {
+      return this.oil;
+    }
+    getToolKit() {
+      return this.toolKit;
+    }
+    getNorth() {
+      return this.north;
+    }
+    getScared() {
+      return this.scared;
+    }
+    //Change
+    changeKey() {
+      this.key = !this.key;
+    }
+    changeOil() {
+      this.oil = !this.oil;
+    }
+    changeToolKit() {
+      this.toolKit = !this.toolKit;
+    }
+    changeNorth() {
+      this.north = !this.north;
+    }
+    changeScared() {
+      this.scared = !this.scared;
+    }
   };
+
+  // build/index.js
+  var root = document.body;
+  var user = new Player(false, false, false, true, false);
   var start = {
     view: function() {
-      return (0, import_mithril.default)("div", { class: "startBox" }, [
-        (0, import_mithril.default)("h1", { class: "title" }, "\u2190Attention!\u291B"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 Click on a door to go to the next room \u2666"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 Click on the button at the bottom to turn around in the current room \u2666"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 Be careful not to get lost \u2666"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 And don't forget: Keep the lights on. \u2666"),
-        (0, import_mithril.default)("button", { class: "startButton", onclick: function() {
-          reset();
-          goThroughDoor("white");
+      return (0, import_mithril2.default)("div", { class: "startBox" }, [
+        (0, import_mithril2.default)("h1", { class: "title" }, "\u2190Attention!\u291B"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Click on a door to go to the next room \u2666"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Click on the button at the bottom to turn around in the current room \u2666"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Be careful not to get lost \u2666"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 And don't forget: Keep the lights on. \u2666"),
+        (0, import_mithril2.default)("button", { class: "startButton", onclick: function() {
+          user.reset();
+          user.goThroughDoor("white");
         } }, "Start Game")
       ]);
     }
   };
   var gameOver = {
     view: function() {
-      return (0, import_mithril.default)("div", { class: "endBox" }, [
-        (0, import_mithril.default)("h1", { class: "title" }, "\u291CYou-died\u2192"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 I warned you \u2666"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 Happy? \u2666"),
-        (0, import_mithril.default)("button", { class: "restartButton", onclick: function() {
-          import_mithril.default.route.set("start");
+      return (0, import_mithril2.default)("div", { class: "endBox" }, [
+        (0, import_mithril2.default)("h1", { class: "title" }, "\u291CYou-died\u2192"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 I warned you \u2666"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Happy? \u2666"),
+        (0, import_mithril2.default)("button", { class: "restartButton", onclick: function() {
+          import_mithril2.default.route.set("start");
         } }, "No.")
       ]);
     }
   };
   var darkness = {
     view: function() {
-      player.scared = true;
+      user.changeScared();
       setTimeout(() => {
-        console.log(import_mithril.default.route.get());
-        if (import_mithril.default.route.get() === "darkness") {
-          import_mithril.default.route.set("gameOver");
+        if (import_mithril2.default.route.get() === "darkness") {
+          import_mithril2.default.route.set("gameOver");
         }
+        console.log(import_mithril2.default.route.get());
       }, 1e4);
-      return (0, import_mithril.default)("div", { class: "darkness" }, (0, import_mithril.default)("div", { class: "abyss" }, [
-        (0, import_mithril.default)("button", { class: "hiddenSwitch", onclick: function() {
+      return (0, import_mithril2.default)("div", { class: "darkness" }, (0, import_mithril2.default)("div", { class: "abyss" }, [
+        (0, import_mithril2.default)("button", { class: "hiddenSwitch", onclick: function() {
           root.removeAttribute("ID");
-          import_mithril.default.route.set("darkRed");
+          import_mithril2.default.route.set("darkRed");
         } }),
-        (0, import_mithril.default)("div", { class: "warning" }, "It's coming...")
+        (0, import_mithril2.default)("div", { class: "warning" }, "It's coming...")
       ]));
     }
   };
   var goodEnd = {
     view: function() {
-      return (0, import_mithril.default)("div", { class: "startBox" }, [
-        (0, import_mithril.default)("h1", { class: "title" }, "\u291CGame-Over!\u2192"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 You barricade the door \u2666"),
-        (0, import_mithril.default)("p", { class: "description" }, "\u2666 No one will be able to turn the lights off now \u2666"),
-        (0, import_mithril.default)("button", { class: "restartButton", onclick: function() {
-          import_mithril.default.route.set("start");
+      return (0, import_mithril2.default)("div", { class: "startBox" }, [
+        (0, import_mithril2.default)("h1", { class: "title" }, "\u291CGame-Over!\u2192"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 You barricade the door \u2666"),
+        (0, import_mithril2.default)("p", { class: "description" }, "\u2666 No one will be able to turn the lights off now \u2666"),
+        (0, import_mithril2.default)("button", { class: "restartButton", onclick: function() {
+          import_mithril2.default.route.set("start");
         } }, "Good.")
       ]);
     }
   };
   var white = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "white" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "white" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("lightRed");
+                user.goThroughDoor("lightRed");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("lightBlue");
+                user.goThroughDoor("lightBlue");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("white");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("white");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "white" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "white" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("darkPurple");
+              user.goThroughDoor("darkPurple");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("white");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("white");
           } }, "Turn North"))
         ];
       }
@@ -1692,28 +1759,28 @@
   };
   var black = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "black" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
             class: "lockedDoor",
             onclick: function() {
-              checkDoor();
+              user.checkDoor();
             }
           }, "-"), ""),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("black");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("black");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "black" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("red");
+              user.goThroughDoor("red");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("black");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("black");
           } }, "Turn North"))
         ];
       }
@@ -1722,15 +1789,15 @@
   var blackNoKey = {
     view: function() {
       return [
-        (0, import_mithril.default)("div", { class: "black" }, (0, import_mithril.default)("button", {
+        (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
           class: "lockedDoor",
           onclick: function() {
-            checkDoor();
+            user.checkDoor();
           }
         }, "-")),
-        (0, import_mithril.default)("div", { class: "locked" }, "It's locked"),
-        (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-          turnAroundTo("black");
+        (0, import_mithril2.default)("div", { class: "locked" }, "It's locked"),
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+          user.turnAroundTo("black");
         } }, "Turn South"))
       ];
     }
@@ -1738,15 +1805,15 @@
   var blackNoOil = {
     view: function() {
       return [
-        (0, import_mithril.default)("div", { class: "black" }, (0, import_mithril.default)("button", {
+        (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
           class: "lockedDoor",
           onclick: function() {
-            checkDoor();
+            user.checkDoor();
           }
         }, "-")),
-        (0, import_mithril.default)("div", { class: "locked" }, "Rusted. It won't open like this"),
-        (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-          turnAroundTo("black");
+        (0, import_mithril2.default)("div", { class: "locked" }, "Rusted. It won't open like this"),
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+          user.turnAroundTo("black");
         } }, "Turn South"))
       ];
     }
@@ -1754,14 +1821,14 @@
   var blackToolSet = {
     view: function() {
       return [
-        (0, import_mithril.default)("div", { class: "black" }, (0, import_mithril.default)("button", { class: "lockedDoor" }, "-")),
-        (0, import_mithril.default)("div", { class: "toolBox" }, [
-          (0, import_mithril.default)("p", "Do you want to use the Toolkit?"),
-          (0, import_mithril.default)("div", { class: "buttonBox" }, (0, import_mithril.default)("button", { class: "choice", onclick: function() {
-            import_mithril.default.route.set("/goodEnd");
-          } }, "Yes"), (0, import_mithril.default)("button", { class: "choice", onclick: function() {
-            player.toolSet = false;
-            goThroughDoor("black");
+        (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", { class: "lockedDoor" }, "-")),
+        (0, import_mithril2.default)("div", { class: "toolBox" }, [
+          (0, import_mithril2.default)("p", "Do you want to use the Tool Kit?"),
+          (0, import_mithril2.default)("div", { class: "buttonBox" }, (0, import_mithril2.default)("button", { class: "choice", onclick: function() {
+            import_mithril2.default.route.set("/goodEnd");
+          } }, "Yes"), (0, import_mithril2.default)("button", { class: "choice", onclick: function() {
+            user.changeToolKit();
+            user.goThroughDoor("black");
           } }, "No"))
         ])
       ];
@@ -1769,28 +1836,28 @@
   };
   var blue = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "blue" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "blue" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("darkBlue");
+              user.goThroughDoor("darkBlue");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("blue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("blue");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "blue" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "blue" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("lightBlue");
+              user.goThroughDoor("lightBlue");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("blue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("blue");
           } }, "Turn North"))
         ];
       }
@@ -1798,36 +1865,36 @@
   };
   var lightBlue = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "lightBlue" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "lightBlue" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("purple");
+                user.goThroughDoor("purple");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("blue");
+                user.goThroughDoor("blue");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("lightBlue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("lightBlue");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "lightBlue" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "lightBlue" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("white");
+              user.goThroughDoor("white");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("lightBlue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("lightBlue");
           } }, "Turn North"))
         ];
       }
@@ -1835,44 +1902,43 @@
   };
   var darkBlue = {
     view: function() {
-      if (player.north) {
-        if (player.key) {
-          return (0, import_mithril.default)("div", { class: "darkBlue" }, (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("darkBlue");
+      if (user.getNorth()) {
+        if (user.getKey()) {
+          return (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("darkBlue");
           } }, "Turn South"));
         } else {
           return [
-            (0, import_mithril.default)("div", { class: "darkBlue" }, (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("button", {
               class: "item",
               onclick: function() {
-                player.key = true;
-                console.log("you found a key!");
-                import_mithril.default.route.set("darkBlueObtained");
+                user.changeKey();
+                import_mithril2.default.route.set("darkBlueObtained");
               }
             }, "\u{1F511}")),
-            (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-              turnAroundTo("darkBlue");
+            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+              user.turnAroundTo("darkBlue");
             } }, "Turn South"))
           ];
         }
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "darkBlue" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "darkBlue" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("blue");
+                user.goThroughDoor("blue");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("purple");
+                user.goThroughDoor("purple");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("darkBlue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("darkBlue");
           } }, "Turn North"))
         ];
       }
@@ -1881,45 +1947,45 @@
   var darkBlueObtained = {
     view: function() {
       return [
-        (0, import_mithril.default)("div", { class: "darkBlue" }, (0, import_mithril.default)("div", { class: "locked" }, "You found a key!")),
-        (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-          turnAroundTo("darkBlue");
+        (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("div", { class: "locked" }, "You found a key!")),
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+          user.turnAroundTo("darkBlue");
         } }, "Turn South"))
       ];
     }
   };
   var red = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "red" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "red" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("black");
+                user.goThroughDoor("black");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("yellow");
+                user.goThroughDoor("yellow");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("red");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("red");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "red" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "red" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("lightRed");
+              user.goThroughDoor("lightRed");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("red");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("red");
           } }, "Turn North"))
         ];
       }
@@ -1927,36 +1993,36 @@
   };
   var lightRed = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "lightRed" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "lightRed" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("red");
+                user.goThroughDoor("red");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("lightPurple");
+                user.goThroughDoor("lightPurple");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("lightRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("lightRed");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "lightRed" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "lightRed" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("white");
+              user.goThroughDoor("white");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("lightRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("lightRed");
           } }, "Turn North"))
         ];
       }
@@ -1964,34 +2030,34 @@
   };
   var darkRed = {
     view: function() {
-      let text = "";
-      if (player.scared === true) {
+      let text;
+      if (user.getScared()) {
         text = "Find the Toolkit.";
       } else {
         text = "Are you sure about this?";
       }
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "darkRed" }, (0, import_mithril.default)("button", { class: "switch", onclick: function() {
+          (0, import_mithril2.default)("div", { class: "darkRed" }, (0, import_mithril2.default)("button", { class: "switch", onclick: function() {
             console.log("click");
             root.setAttribute("ID", "lightsOff");
             console.log("you turned the lights off");
-            import_mithril.default.route.set("darkness");
+            import_mithril2.default.route.set("darkness");
           } }, ""), text),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("darkRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("darkRed");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "darkRed" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "darkRed" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("black");
+              user.goThroughDoor("black");
             }
           })),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("darkRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("darkRed");
           } }, "Turn North"))
         ];
       }
@@ -1999,36 +2065,36 @@
   };
   var purple = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "purple" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "purple" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("darkPurple");
+                user.goThroughDoor("darkPurple");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("darkBlue");
+                user.goThroughDoor("darkBlue");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("purple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("purple");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "purple" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "purple" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("lightBlue");
+              user.goThroughDoor("lightBlue");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("purple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("purple");
           } }, "Turn North"))
         ];
       }
@@ -2036,36 +2102,36 @@
   };
   var lightPurple = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "lightPurple" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "lightPurple" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("yellow");
+                user.goThroughDoor("yellow");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("darkPurple");
+                user.goThroughDoor("darkPurple");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("lightPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("lightPurple");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "lightPurple" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "lightPurple" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("lightRed");
+              user.goThroughDoor("lightRed");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("lightPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("lightPurple");
           } }, "Turn North"))
         ];
       }
@@ -2073,42 +2139,42 @@
   };
   var darkPurple = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "darkPurple" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "darkPurple" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("white");
+              user.goThroughDoor("white");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("darkPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("darkPurple");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "darkPurple" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "darkPurple" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("purple");
+                user.goThroughDoor("purple");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("lightPurple");
+                user.goThroughDoor("lightPurple");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("yellow");
+                user.goThroughDoor("yellow");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("darkPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("darkPurple");
           } }, "Turn North"))
         ];
       }
@@ -2116,44 +2182,44 @@
   };
   var yellow = {
     view: function() {
-      if (player.north) {
+      if (user.getNorth()) {
         return [
-          (0, import_mithril.default)("div", { class: "yellow" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "yellow" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("orange");
+                user.goThroughDoor("orange");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("darkPurple");
+                user.goThroughDoor("darkPurple");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("yellow");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("yellow");
           } }, "Turn South"))
         ];
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "yellow" }, [
-            (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "yellow" }, [
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("lightPurple");
+                user.goThroughDoor("lightPurple");
               }
             }, "-"),
-            (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("button", {
               class: "door",
               onclick: function() {
-                goThroughDoor("red");
+                user.goThroughDoor("red");
               }
             }, "-")
           ]),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("yellow");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("yellow");
           } }, "Turn North"))
         ];
       }
@@ -2161,44 +2227,43 @@
   };
   var orange = {
     view: function() {
-      if (player.north) {
-        if (player.oil) {
+      if (user.getNorth()) {
+        if (user.getOil()) {
           return [
-            (0, import_mithril.default)("div", { class: "orange" }, (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-              turnAroundTo("orange");
+            (0, import_mithril2.default)("div", { class: "orange" }, (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+              user.turnAroundTo("orange");
             } }, "Turn South")),
-            (0, import_mithril.default)("div", { class: "hide" }, (0, import_mithril.default)("button", {
+            (0, import_mithril2.default)("div", { class: "hide" }, (0, import_mithril2.default)("button", {
               class: "door",
               id: "hiddenPassage",
               onclick: function() {
-                goThroughDoor("green");
+                user.goThroughDoor("green");
               }
             }))
           ];
         } else {
           return [
-            (0, import_mithril.default)("div", { class: "orange" }, [
-              (0, import_mithril.default)("button", { class: "tool", onclick: function() {
-                player.oil = true;
-                console.log("you got an oilcan!");
-                import_mithril.default.route.set("orangeObtained");
+            (0, import_mithril2.default)("div", { class: "orange" }, [
+              (0, import_mithril2.default)("button", { class: "tool", onclick: function() {
+                user.changeOil();
+                import_mithril2.default.route.set("orangeObtained");
               } }, "\u{1F6E2}\uFE0F")
             ]),
-            (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-              turnAroundTo("orange");
+            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+              user.turnAroundTo("orange");
             } }, "Turn South"))
           ];
         }
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "orange" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "orange" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("yellow");
+              user.goThroughDoor("yellow");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("orange");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("orange");
           } }, "Turn North"))
         ];
       }
@@ -2207,46 +2272,45 @@
   var orangeObtained = {
     view: function() {
       return [
-        (0, import_mithril.default)("div", { class: "orange" }, [
-          (0, import_mithril.default)("div", { class: "locked" }, "You found some Oil!")
+        (0, import_mithril2.default)("div", { class: "orange" }, [
+          (0, import_mithril2.default)("div", { class: "locked" }, "You found some Oil!")
         ]),
-        (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-          turnAroundTo("orange");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+          user.turnAroundTo("orange");
         } }, "Turn South"))
       ];
     }
   };
   var green = {
     view: function() {
-      if (player.north) {
-        if (player.toolSet) {
-          return (0, import_mithril.default)("div", { class: "green" }, (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("green");
+      if (user.getNorth()) {
+        if (user.getToolKit()) {
+          return (0, import_mithril2.default)("div", { class: "green" }, (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("green");
           } }, "Turn South"));
         } else {
           return [
-            (0, import_mithril.default)("div", { class: "green" }, [
-              (0, import_mithril.default)("button", { class: "tool", onclick: function() {
-                player.toolSet = true;
-                console.log("you got a Tool Set!");
-                import_mithril.default.route.set("greenObtained");
+            (0, import_mithril2.default)("div", { class: "green" }, [
+              (0, import_mithril2.default)("button", { class: "tool", onclick: function() {
+                user.changeToolKit();
+                import_mithril2.default.route.set("greenObtained");
               } }, "\u{1F6E0}")
             ]),
-            (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-              turnAroundTo("green");
+            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+              user.turnAroundTo("green");
             } }, "Turn South"))
           ];
         }
       } else {
         return [
-          (0, import_mithril.default)("div", { class: "green" }, (0, import_mithril.default)("button", {
+          (0, import_mithril2.default)("div", { class: "green" }, (0, import_mithril2.default)("button", {
             class: "door",
             onclick: function() {
-              goThroughDoor("orange");
+              user.goThroughDoor("orange");
             }
           }, "-")),
-          (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-            turnAroundTo("green");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+            user.turnAroundTo("green");
           } }, "Turn North"))
         ];
       }
@@ -2255,48 +2319,16 @@
   var greenObtained = {
     view: function() {
       return [
-        (0, import_mithril.default)("div", { class: "green" }, [
-          (0, import_mithril.default)("div", { class: "locked" }, "You found a Tool Set!")
+        (0, import_mithril2.default)("div", { class: "green" }, [
+          (0, import_mithril2.default)("div", { class: "locked" }, "You found a Toolkit!")
         ]),
-        (0, import_mithril.default)("div", (0, import_mithril.default)("button", { class: "turn", onclick: function() {
-          turnAroundTo("green");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
+          user.turnAroundTo("green");
         } }, "Turn South"))
       ];
     }
   };
-  function goThroughDoor(nextRoom) {
-    import_mithril.default.route.set(`/${nextRoom}`);
-  }
-  function turnAroundTo(room) {
-    player.north = !player.north;
-    import_mithril.default.route.set(`/${room}`);
-  }
-  function checkDoor() {
-    if (player.toolSet) {
-      console.log("Use the Toolset?");
-      import_mithril.default.route.set("/blackToolSet");
-    } else {
-      if (player.key && player.oil) {
-        console.log("you got everything to go further");
-        goThroughDoor("darkRed");
-      } else if (player.key) {
-        console.log("the door doesnt move. its rusted");
-        import_mithril.default.route.set("/blackNoOil");
-      } else {
-        console.log("its locked");
-        import_mithril.default.route.set("/blackNoKey");
-      }
-    }
-  }
-  function reset() {
-    root.removeAttribute("ID");
-    player.toolSet = false;
-    player.key = false;
-    player.oil = false;
-    player.north = true;
-    player.scared = false;
-  }
-  import_mithril.default.route(root, "/start", {
+  import_mithril2.default.route(root, "/start", {
     "/start": start,
     "/gameOver": gameOver,
     "/goodEnd": goodEnd,

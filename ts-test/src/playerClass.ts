@@ -1,3 +1,5 @@
+import m from "mithril";
+
 export class Player{
     //items
     private key:Boolean;
@@ -16,12 +18,40 @@ export class Player{
         this.scared = scared;
     }
 
+
+    //Game functions
     reset(){
         this.key = false;
         this.oil = false;
         this.toolKit = false;
         this.north = true;
         this.scared = false;
+    }
+
+    goThroughDoor(nextRoom:String){
+        m.route.set(`/${nextRoom}`)
+    }
+
+    turnAroundTo(room:String){
+        this.changeNorth()
+        m.route.set(`/${room}`)
+    }
+
+    checkDoor(){
+        if(this.getToolKit()){
+            m.route.set("/blackToolSet")
+        }
+        else{
+            if(this.getKey() && this.getOil()){
+                this.goThroughDoor("darkRed");
+            }
+            else if(this.getKey()){
+                m.route.set("/blackNoOil")
+            }
+            else {
+                m.route.set("/blackNoKey")
+            }
+        }
     }
 
 

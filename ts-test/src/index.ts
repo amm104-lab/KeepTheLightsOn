@@ -15,7 +15,7 @@ let start = {
             m("p",{class:"description"}, "♦ And don't forget: Keep the lights on. ♦"),
             m("button",{class:"startButton", onclick: function(){
                 user.reset();
-                goThroughDoor("white")
+                user.goThroughDoor("white")
                 }},"Start Game")
         ])
     }
@@ -39,6 +39,7 @@ let darkness = {
             if(m.route.get()==="darkness"){
                 m.route.set("gameOver");
             }
+            console.log(m.route.get());
         },10000)
         return m("div",{class:"darkness"},
             m("div",{class:"abyss"},[
@@ -67,19 +68,19 @@ let white = {
         if(user.getNorth()){
             return [m("div",{class:"white"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("lightRed")}}, "-"),
+                    onclick: function(){user.goThroughDoor("lightRed")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("lightBlue")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("lightBlue")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("white")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("white")}}, "Turn South")
                 )];
         }
         else{
             return [m("div",{class:"white"},
                 m("button",{class:"door",
-                    onclick: function(){goThroughDoor("darkPurple")}}, "-")),
+                    onclick: function(){user.goThroughDoor("darkPurple")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("white")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("white")}}, "Turn North")
                 )]
         }
     }
@@ -91,18 +92,18 @@ let black = {
             return [m("div",{class:"black"},
                 m("button", {class:"lockedDoor",
                     onclick: function (){
-                        checkDoor();
+                        user.checkDoor();
                     }}, "-"),""),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("black")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("black")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"black"},
                 m("button",{class:"door",
-                    onclick: function(){goThroughDoor("red")}}, "-")),
+                    onclick: function(){user.goThroughDoor("red")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("black")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("black")}}, "Turn North")
                 )]
         }
     }
@@ -113,11 +114,11 @@ let blackNoKey = {
         return [m("div",{class:"black"},
             m("button", {class:"lockedDoor",
                 onclick: function (){
-                    checkDoor();
+                    user.checkDoor();
                 }}, "-")),
             m("div",{class: "locked"}, "It's locked"),
             m("div",
-                m("button",{class:"turn", onclick: function(){turnAroundTo("black")}}, "Turn South")
+                m("button",{class:"turn", onclick: function(){user.turnAroundTo("black")}}, "Turn South")
             )]
     }
 }
@@ -127,11 +128,11 @@ let blackNoOil = {
         return [m("div",{class:"black"},
             m("button", {class:"lockedDoor",
                 onclick: function (){
-                    checkDoor();
+                    user.checkDoor();
                 }}, "-")),
             m("div",{class: "locked"}, "Rusted. It won't open like this"),
             m("div",
-                m("button",{class:"turn", onclick: function(){turnAroundTo("black")}}, "Turn South")
+                m("button",{class:"turn", onclick: function(){user.turnAroundTo("black")}}, "Turn South")
             )]
     }
 }
@@ -146,7 +147,7 @@ let blackToolSet = {
                     m("button",{class:"choice", onclick: function(){m.route.set("/goodEnd")}}, "Yes"),
                     m("button",{class:"choice", onclick: function(){
                         user.changeToolKit();
-                        goThroughDoor("black");
+                        user.goThroughDoor("black");
                         }}, "No"))]
             )]
     }
@@ -157,17 +158,17 @@ let blue = {
         if(user.getNorth()){
             return [m("div",{class:"blue"},
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("darkBlue")}}, "-")),
+                    onclick: function(){user.goThroughDoor("darkBlue")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("blue")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("blue")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"blue"},
                 m("button",{class:"door",
-                    onclick: function(){goThroughDoor("lightBlue")}}, "-")),
+                    onclick: function(){user.goThroughDoor("lightBlue")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("blue")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("blue")}}, "Turn North")
                 )]
         }
     }
@@ -178,19 +179,19 @@ let lightBlue = {
         if(user.getNorth()){
             return [m("div",{class:"lightBlue"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("purple")}}, "-"),
+                    onclick: function(){user.goThroughDoor("purple")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("blue")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("blue")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("lightBlue")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("lightBlue")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"lightBlue"},
                 m("button",{class:"door",
-                    onclick: function(){goThroughDoor("white")}}, "-")),
+                    onclick: function(){user.goThroughDoor("white")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("lightBlue")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("lightBlue")}}, "Turn North")
                 )]
         }
     }
@@ -201,7 +202,7 @@ let darkBlue = {
         if(user.getNorth()){
             if(user.getKey()){
                 return m("div",{class:"darkBlue"},
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("darkBlue")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkBlue")}}, "Turn South")
                 )
             }
             else{
@@ -214,18 +215,18 @@ let darkBlue = {
                             }
                         }, "🔑")),
                     m("div",
-                        m("button",{class:"turn", onclick: function(){turnAroundTo("darkBlue")}}, "Turn South")
+                        m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkBlue")}}, "Turn South")
                     )]
             }
         }
         else{
             return [m("div",{class:"darkBlue"}, [
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("blue")}}, "-"),
+                    onclick: function(){user.goThroughDoor("blue")}}, "-"),
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("purple")}}, "-"),]),
+                    onclick: function(){user.goThroughDoor("purple")}}, "-"),]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("darkBlue")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkBlue")}}, "Turn North")
                 )]
         }
     }
@@ -236,7 +237,7 @@ let darkBlueObtained = {
         return [m("div",{class:"darkBlue"},
             m("div", {class: "locked"}, "You found a key!")),
             m("div",
-                m("button",{class:"turn", onclick: function(){turnAroundTo("darkBlue")}}, "Turn South")
+                m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkBlue")}}, "Turn South")
             )]
     }
 }
@@ -246,19 +247,19 @@ let red = {
         if(user.getNorth()){
             return [m("div",{class:"red"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("black")}}, "-"),
+                    onclick: function(){user.goThroughDoor("black")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("yellow")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("yellow")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("red")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("red")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"red"},
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("lightRed")}}, "-")),
+                    onclick: function(){user.goThroughDoor("lightRed")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("red")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("red")}}, "Turn North")
                 )]
         }
     }
@@ -269,19 +270,19 @@ let lightRed = {
         if(user.getNorth()){
             return [m("div",{class:"lightRed"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("red")}}, "-"),
+                    onclick: function(){user.goThroughDoor("red")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("lightPurple")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("lightPurple")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("lightRed")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("lightRed")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"lightRed"},
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("white")}}, "-")),
+                    onclick: function(){user.goThroughDoor("white")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("lightRed")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("lightRed")}}, "Turn North")
                 )]
         }
     }
@@ -301,15 +302,15 @@ let darkRed = {
                         m.route.set("darkness");
                     }},""),text),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("darkRed")}},"Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkRed")}},"Turn South")
                 )]
         }
         else{
             return [m("div",{class:"darkRed"},
                 m("button",{class:"door",
-                    onclick: function(){goThroughDoor("black")}})),
+                    onclick: function(){user.goThroughDoor("black")}})),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("darkRed")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkRed")}}, "Turn North")
                 )]
         }
     }
@@ -320,19 +321,19 @@ let purple = {
         if(user.getNorth()){
             return [m("div",{class:"purple"},
                 [m("button",{class:"door",
-                    onclick:function(){goThroughDoor("darkPurple")}}, "-"),
+                    onclick:function(){user.goThroughDoor("darkPurple")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("darkBlue")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("darkBlue")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("purple")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("purple")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"purple"},
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("lightBlue")}}, "-")),
+                    onclick: function(){user.goThroughDoor("lightBlue")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("purple")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("purple")}}, "Turn North")
                 )]
         }
     }
@@ -343,19 +344,19 @@ let lightPurple = {
         if(user.getNorth()){
             return [m("div",{class:"lightPurple"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("yellow")}}, "-"),
+                    onclick: function(){user.goThroughDoor("yellow")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("darkPurple")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("darkPurple")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("lightPurple")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("lightPurple")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"lightPurple"},
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("lightRed")}}, "-")),
+                    onclick: function(){user.goThroughDoor("lightRed")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("lightPurple")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("lightPurple")}}, "Turn North")
                 )]
         }
     }
@@ -366,22 +367,22 @@ let darkPurple = {
         if(user.getNorth()){
             return [m("div",{class:"darkPurple"},
                 m("button", {class:"door",
-                    onclick: function(){goThroughDoor("white")}}, "-")),
+                    onclick: function(){user.goThroughDoor("white")}}, "-")),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("darkPurple")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkPurple")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"darkPurple"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("purple")}}, "-"),
+                    onclick: function(){user.goThroughDoor("purple")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("lightPurple")}}, "-"),
+                        onclick: function(){user.goThroughDoor("lightPurple")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("yellow")}}, "-")
+                        onclick: function(){user.goThroughDoor("yellow")}}, "-")
                 ]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("darkPurple")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("darkPurple")}}, "Turn North")
                 )]
         }
     }
@@ -392,21 +393,21 @@ let yellow = {
         if(user.getNorth()){
             return [m("div",{class:"yellow"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("orange")}}, "-"),
+                    onclick: function(){user.goThroughDoor("orange")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("darkPurple")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("darkPurple")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("yellow")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("yellow")}}, "Turn South")
                 )]
         }
         else{
             return [m("div",{class:"yellow"},
                 [m("button",{class:"door",
-                    onclick: function(){goThroughDoor("lightPurple")}}, "-"),
+                    onclick: function(){user.goThroughDoor("lightPurple")}}, "-"),
                     m("button",{class:"door",
-                        onclick: function(){goThroughDoor("red")}}, "-")]),
+                        onclick: function(){user.goThroughDoor("red")}}, "-")]),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("yellow")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("yellow")}}, "Turn North")
                 )]
         }
     }
@@ -417,10 +418,10 @@ let orange = {
         if(user.getNorth()){
             if(user.getOil()){
                 return [m("div",{class:"orange"},
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("orange")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("orange")}}, "Turn South")
                 ),
                     m("div",{class:"hide"},m("button",{class:"door", id: "hiddenPassage",
-                        onclick: function (){goThroughDoor("green")}}))]
+                        onclick: function (){user.goThroughDoor("green")}}))]
             }
             else{
                 return [m("div",{class:"orange"}, [
@@ -430,16 +431,16 @@ let orange = {
                         }}, "🛢️")
                 ]),
                     m("div",
-                        m("button",{class:"turn", onclick: function(){turnAroundTo("orange")}}, "Turn South")
+                        m("button",{class:"turn", onclick: function(){user.turnAroundTo("orange")}}, "Turn South")
                     )]
             }
         }
         else{
             return [m("div",{class:"orange"},
                 m("button",{class:"door",
-                    onclick: function (){goThroughDoor("yellow")}}, "-"),),
+                    onclick: function (){user.goThroughDoor("yellow")}}, "-"),),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("orange")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("orange")}}, "Turn North")
                 )]
         }
     }
@@ -451,7 +452,7 @@ let orangeObtained = {
             m("div",{class:"locked"}, "You found some Oil!")
         ]),
             m("div",
-                m("button",{class:"turn", onclick: function(){turnAroundTo("orange")}}, "Turn South")
+                m("button",{class:"turn", onclick: function(){user.turnAroundTo("orange")}}, "Turn South")
             )]
     }
 }
@@ -461,7 +462,7 @@ let green = {
         if(user.getNorth()){
             if(user.getToolKit()){
                 return m("div",{class:"green"},
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("green")}}, "Turn South")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("green")}}, "Turn South")
                 )
             }
             else{
@@ -472,16 +473,16 @@ let green = {
                         }}, "🛠")
                 ]),
                     m("div",
-                        m("button",{class:"turn", onclick: function(){turnAroundTo("green")}}, "Turn South")
+                        m("button",{class:"turn", onclick: function(){user.turnAroundTo("green")}}, "Turn South")
                     )]
             }
         }
         else{
             return [m("div",{class:"green"},
                 m("button",{class:"door",
-                    onclick: function (){goThroughDoor("orange")}}, "-"),),
+                    onclick: function (){user.goThroughDoor("orange")}}, "-"),),
                 m("div",
-                    m("button",{class:"turn", onclick: function(){turnAroundTo("green")}}, "Turn North")
+                    m("button",{class:"turn", onclick: function(){user.turnAroundTo("green")}}, "Turn North")
                 )]
         }
     }
@@ -493,34 +494,8 @@ let greenObtained = {
             m("div",{class:"locked"}, "You found a Toolkit!")
         ]),
             m("div",
-                m("button",{class:"turn", onclick: function(){turnAroundTo("green")}}, "Turn South")
+                m("button",{class:"turn", onclick: function(){user.turnAroundTo("green")}}, "Turn South")
             )]
-    }
-}
-
-function goThroughDoor(nextRoom:String){
-    m.route.set(`/${nextRoom}`)
-}
-
-function turnAroundTo(room:String){
-    user.changeNorth()
-    m.route.set(`/${room}`)
-}
-
-function checkDoor(){
-    if(user.getToolKit()){
-        m.route.set("/blackToolSet")
-    }
-    else{
-        if(user.getKey() && user.getOil()){
-            goThroughDoor("darkRed");
-        }
-        else if(user.getKey()){
-            m.route.set("/blackNoOil")
-        }
-        else {
-            m.route.set("/blackNoKey")
-        }
     }
 }
 

@@ -1,12 +1,7 @@
 import m from "mithril";
+import { Player } from "./playerClass";
 const root = document.body;
-const player = {
-    key: false,
-    oil: false,
-    north: true,
-    toolSet: false,
-    scared: false,
-};
+const user = new Player(false, false, false, true, false);
 let start = {
     view: function () {
         return m("div", { class: "startBox" }, [
@@ -16,8 +11,8 @@ let start = {
             m("p", { class: "description" }, "♦ Be careful not to get lost ♦"),
             m("p", { class: "description" }, "♦ And don't forget: Keep the lights on. ♦"),
             m("button", { class: "startButton", onclick: function () {
-                    reset();
-                    goThroughDoor("white");
+                    user.reset();
+                    user.goThroughDoor("white");
                 } }, "Start Game")
         ]);
     }
@@ -34,12 +29,12 @@ let gameOver = {
 };
 let darkness = {
     view: function () {
-        player.scared = true;
+        user.changeScared();
         setTimeout(() => {
-            console.log(m.route.get());
             if (m.route.get() === "darkness") {
                 m.route.set("gameOver");
             }
+            console.log(m.route.get());
         }, 10000);
         return m("div", { class: "darkness" }, m("div", { class: "abyss" }, [
             m("button", { class: "hiddenSwitch", onclick: function () {
@@ -62,33 +57,33 @@ let goodEnd = {
 };
 let white = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "white" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("lightRed"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("lightRed"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("lightBlue"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("white"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("lightBlue"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("white"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "white" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("darkPurple"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("white"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("darkPurple"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("white"); } }, "Turn North"))];
         }
     }
 };
 let black = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "black" }, m("button", { class: "lockedDoor",
                     onclick: function () {
-                        checkDoor();
+                        user.checkDoor();
                     } }, "-"), ""),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("black"); } }, "Turn South"))];
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("black"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "black" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("red"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("black"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("red"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("black"); } }, "Turn North"))];
         }
     }
 };
@@ -96,249 +91,247 @@ let blackNoKey = {
     view: function () {
         return [m("div", { class: "black" }, m("button", { class: "lockedDoor",
                 onclick: function () {
-                    checkDoor();
+                    user.checkDoor();
                 } }, "-")),
             m("div", { class: "locked" }, "It's locked"),
-            m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("black"); } }, "Turn South"))];
+            m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("black"); } }, "Turn South"))];
     }
 };
 let blackNoOil = {
     view: function () {
         return [m("div", { class: "black" }, m("button", { class: "lockedDoor",
                 onclick: function () {
-                    checkDoor();
+                    user.checkDoor();
                 } }, "-")),
             m("div", { class: "locked" }, "Rusted. It won't open like this"),
-            m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("black"); } }, "Turn South"))];
+            m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("black"); } }, "Turn South"))];
     }
 };
 let blackToolSet = {
     view: function () {
         return [m("div", { class: "black" }, m("button", { class: "lockedDoor" }, "-")),
             m("div", { class: "toolBox" }, [
-                m("p", "Do you want to use the Toolkit?"),
+                m("p", "Do you want to use the Tool Kit?"),
                 m("div", { class: "buttonBox" }, m("button", { class: "choice", onclick: function () { m.route.set("/goodEnd"); } }, "Yes"), m("button", { class: "choice", onclick: function () {
-                        player.toolSet = false;
-                        goThroughDoor("black");
+                        user.changeToolKit();
+                        user.goThroughDoor("black");
                     } }, "No"))
             ])];
     }
 };
 let blue = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "blue" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("darkBlue"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("blue"); } }, "Turn South"))];
+                    onclick: function () { user.goThroughDoor("darkBlue"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("blue"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "blue" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("lightBlue"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("blue"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("lightBlue"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("blue"); } }, "Turn North"))];
         }
     }
 };
 let lightBlue = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "lightBlue" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("purple"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("purple"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("blue"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("lightBlue"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("blue"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("lightBlue"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "lightBlue" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("white"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("lightBlue"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("white"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("lightBlue"); } }, "Turn North"))];
         }
     }
 };
 let darkBlue = {
     view: function () {
-        if (player.north) {
-            if (player.key) {
-                return m("div", { class: "darkBlue" }, m("button", { class: "turn", onclick: function () { turnAroundTo("darkBlue"); } }, "Turn South"));
+        if (user.getNorth()) {
+            if (user.getKey()) {
+                return m("div", { class: "darkBlue" }, m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkBlue"); } }, "Turn South"));
             }
             else {
                 return [
                     m("div", { class: "darkBlue" }, m("button", { class: "item",
                         onclick: function () {
-                            player.key = true;
-                            console.log("you found a key!");
+                            user.changeKey();
                             m.route.set("darkBlueObtained");
                         }
                     }, "🔑")),
-                    m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkBlue"); } }, "Turn South"))
+                    m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkBlue"); } }, "Turn South"))
                 ];
             }
         }
         else {
             return [m("div", { class: "darkBlue" }, [
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("blue"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("blue"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("purple"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("purple"); } }, "-"),
                 ]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkBlue"); } }, "Turn North"))];
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkBlue"); } }, "Turn North"))];
         }
     }
 };
 let darkBlueObtained = {
     view: function () {
         return [m("div", { class: "darkBlue" }, m("div", { class: "locked" }, "You found a key!")),
-            m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkBlue"); } }, "Turn South"))];
+            m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkBlue"); } }, "Turn South"))];
     }
 };
 let red = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "red" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("black"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("black"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("yellow"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("red"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("yellow"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("red"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "red" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("lightRed"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("red"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("lightRed"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("red"); } }, "Turn North"))];
         }
     }
 };
 let lightRed = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "lightRed" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("red"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("red"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("lightPurple"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("lightRed"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("lightPurple"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("lightRed"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "lightRed" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("white"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("lightRed"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("white"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("lightRed"); } }, "Turn North"))];
         }
     }
 };
 let darkRed = {
     view: function () {
-        let text = "";
-        if (player.scared === true) {
+        let text;
+        if (user.getScared()) {
             text = "Find the Toolkit.";
         }
         else {
             text = "Are you sure about this?";
         }
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "darkRed" }, m("button", { class: "switch", onclick: function () {
                         console.log("click");
                         root.setAttribute("ID", "lightsOff");
                         console.log("you turned the lights off");
                         m.route.set("darkness");
                     } }, ""), text),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkRed"); } }, "Turn South"))];
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkRed"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "darkRed" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("black"); } })),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkRed"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("black"); } })),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkRed"); } }, "Turn North"))];
         }
     }
 };
 let purple = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "purple" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("darkPurple"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("darkPurple"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("darkBlue"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("purple"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("darkBlue"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("purple"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "purple" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("lightBlue"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("purple"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("lightBlue"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("purple"); } }, "Turn North"))];
         }
     }
 };
 let lightPurple = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "lightPurple" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("yellow"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("yellow"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("darkPurple"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("lightPurple"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("darkPurple"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("lightPurple"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "lightPurple" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("lightRed"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("lightPurple"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("lightRed"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("lightPurple"); } }, "Turn North"))];
         }
     }
 };
 let darkPurple = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "darkPurple" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("white"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkPurple"); } }, "Turn South"))];
+                    onclick: function () { user.goThroughDoor("white"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkPurple"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "darkPurple" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("purple"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("purple"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("lightPurple"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("lightPurple"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("yellow"); } }, "-")
+                        onclick: function () { user.goThroughDoor("yellow"); } }, "-")
                 ]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("darkPurple"); } }, "Turn North"))];
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("darkPurple"); } }, "Turn North"))];
         }
     }
 };
 let yellow = {
     view: function () {
-        if (player.north) {
+        if (user.getNorth()) {
             return [m("div", { class: "yellow" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("orange"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("orange"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("darkPurple"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("yellow"); } }, "Turn South"))];
+                        onclick: function () { user.goThroughDoor("darkPurple"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("yellow"); } }, "Turn South"))];
         }
         else {
             return [m("div", { class: "yellow" }, [m("button", { class: "door",
-                        onclick: function () { goThroughDoor("lightPurple"); } }, "-"),
+                        onclick: function () { user.goThroughDoor("lightPurple"); } }, "-"),
                     m("button", { class: "door",
-                        onclick: function () { goThroughDoor("red"); } }, "-")]),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("yellow"); } }, "Turn North"))];
+                        onclick: function () { user.goThroughDoor("red"); } }, "-")]),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("yellow"); } }, "Turn North"))];
         }
     }
 };
 let orange = {
     view: function () {
-        if (player.north) {
-            if (player.oil) {
-                return [m("div", { class: "orange" }, m("button", { class: "turn", onclick: function () { turnAroundTo("orange"); } }, "Turn South")),
+        if (user.getNorth()) {
+            if (user.getOil()) {
+                return [m("div", { class: "orange" }, m("button", { class: "turn", onclick: function () { user.turnAroundTo("orange"); } }, "Turn South")),
                     m("div", { class: "hide" }, m("button", { class: "door", id: "hiddenPassage",
-                        onclick: function () { goThroughDoor("green"); } }))];
+                        onclick: function () { user.goThroughDoor("green"); } }))];
             }
             else {
                 return [m("div", { class: "orange" }, [
                         m("button", { class: "tool", onclick: function () {
-                                player.oil = true;
-                                console.log("you got an oilcan!");
+                                user.changeOil();
                                 m.route.set("orangeObtained");
                             } }, "🛢️")
                     ]),
-                    m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("orange"); } }, "Turn South"))];
+                    m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("orange"); } }, "Turn South"))];
             }
         }
         else {
             return [m("div", { class: "orange" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("yellow"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("orange"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("yellow"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("orange"); } }, "Turn North"))];
         }
     }
 };
@@ -347,78 +340,40 @@ let orangeObtained = {
         return [m("div", { class: "orange" }, [
                 m("div", { class: "locked" }, "You found some Oil!")
             ]),
-            m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("orange"); } }, "Turn South"))];
+            m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("orange"); } }, "Turn South"))];
     }
 };
 let green = {
     view: function () {
-        if (player.north) {
-            if (player.toolSet) {
-                return m("div", { class: "green" }, m("button", { class: "turn", onclick: function () { turnAroundTo("green"); } }, "Turn South"));
+        if (user.getNorth()) {
+            if (user.getToolKit()) {
+                return m("div", { class: "green" }, m("button", { class: "turn", onclick: function () { user.turnAroundTo("green"); } }, "Turn South"));
             }
             else {
                 return [m("div", { class: "green" }, [
                         m("button", { class: "tool", onclick: function () {
-                                player.toolSet = true;
-                                console.log("you got a Tool Set!");
+                                user.changeToolKit();
                                 m.route.set("greenObtained");
                             } }, "🛠")
                     ]),
-                    m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("green"); } }, "Turn South"))];
+                    m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("green"); } }, "Turn South"))];
             }
         }
         else {
             return [m("div", { class: "green" }, m("button", { class: "door",
-                    onclick: function () { goThroughDoor("orange"); } }, "-")),
-                m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("green"); } }, "Turn North"))];
+                    onclick: function () { user.goThroughDoor("orange"); } }, "-")),
+                m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("green"); } }, "Turn North"))];
         }
     }
 };
 let greenObtained = {
     view: function () {
         return [m("div", { class: "green" }, [
-                m("div", { class: "locked" }, "You found a Tool Set!")
+                m("div", { class: "locked" }, "You found a Toolkit!")
             ]),
-            m("div", m("button", { class: "turn", onclick: function () { turnAroundTo("green"); } }, "Turn South"))];
+            m("div", m("button", { class: "turn", onclick: function () { user.turnAroundTo("green"); } }, "Turn South"))];
     }
 };
-function goThroughDoor(nextRoom) {
-    // console.log(nextRoom);
-    m.route.set(`/${nextRoom}`);
-}
-function turnAroundTo(room) {
-    // console.log(room);
-    player.north = !player.north;
-    m.route.set(`/${room}`);
-}
-function checkDoor() {
-    if (player.toolSet) {
-        console.log("Use the Toolset?");
-        m.route.set("/blackToolSet");
-    }
-    else {
-        if (player.key && player.oil) {
-            console.log("you got everything to go further");
-            goThroughDoor("darkRed");
-        }
-        else if (player.key) {
-            console.log("the door doesnt move. its rusted");
-            m.route.set("/blackNoOil");
-        }
-        else {
-            console.log("its locked");
-            m.route.set("/blackNoKey");
-        }
-    }
-}
-function reset() {
-    root.removeAttribute("ID");
-    player.toolSet = false;
-    player.key = false;
-    player.oil = false;
-    player.north = true;
-    player.scared = false;
-}
 m.route(root, "/start", {
     "/start": start,
     "/gameOver": gameOver,
