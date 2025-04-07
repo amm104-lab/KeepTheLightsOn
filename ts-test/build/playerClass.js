@@ -7,6 +7,7 @@ export class Player {
         this.north = north;
         this.scared = scared;
     }
+    //Game functions
     reset() {
         this.key = false;
         this.oil = false;

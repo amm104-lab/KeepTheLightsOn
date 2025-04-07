@@ -1,6 +1,7 @@
 import m from "mithril";
 
 export class Player{
+
     //items
     private key:Boolean;
     private oil:Boolean;

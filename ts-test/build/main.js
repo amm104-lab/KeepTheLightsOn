@@ -398,7 +398,7 @@
               if (old.length > commonLength) removeNodes(parent, old, start2, old.length);
               if (vnodes.length > commonLength) createNodes(parent, vnodes, start2, vnodes.length, hooks, nextSibling, ns);
             } else {
-              var oldEnd = old.length - 1, end = vnodes.length - 1, map, o, v, oe, ve, topSibling;
+              var oldEnd = old.length - 1, end = vnodes.length - 1, map2, o, v, oe, ve, topSibling;
               while (oldEnd >= oldStart && end >= start2) {
                 oe = old[oldEnd];
                 ve = vnodes[end];
@@ -441,12 +441,12 @@
               if (start2 > end) removeNodes(parent, old, oldStart, oldEnd + 1);
               else if (oldStart > oldEnd) createNodes(parent, vnodes, start2, end + 1, hooks, nextSibling, ns);
               else {
-                var originalNextSibling = nextSibling, vnodesLength = end - start2 + 1, oldIndices = new Array(vnodesLength), li = 0, i = 0, pos = 2147483647, matched = 0, map, lisIndices;
+                var originalNextSibling = nextSibling, vnodesLength = end - start2 + 1, oldIndices = new Array(vnodesLength), li = 0, i = 0, pos = 2147483647, matched = 0, map2, lisIndices;
                 for (i = 0; i < vnodesLength; i++) oldIndices[i] = -1;
                 for (i = end; i >= start2; i--) {
-                  if (map == null) map = getKeyMap(old, oldStart, oldEnd + 1);
+                  if (map2 == null) map2 = getKeyMap(old, oldStart, oldEnd + 1);
                   ve = vnodes[i];
-                  var oldIndex = map[ve.key];
+                  var oldIndex = map2[ve.key];
                   if (oldIndex != null) {
                     pos = oldIndex < pos ? oldIndex : -1;
                     oldIndices[i - start2] = oldIndex;
@@ -572,15 +572,15 @@
           }
         }
         function getKeyMap(vnodes, start2, end) {
-          var map = /* @__PURE__ */ Object.create(null);
+          var map2 = /* @__PURE__ */ Object.create(null);
           for (; start2 < end; start2++) {
             var vnode = vnodes[start2];
             if (vnode != null) {
               var key = vnode.key;
-              if (key != null) map[key] = start2;
+              if (key != null) map2[key] = start2;
             }
           }
-          return map;
+          return map2;
         }
         var lisTemp = [];
         function makeLisIndices(a) {
@@ -945,19 +945,19 @@
           }
         }
         redraw.sync = sync;
-        function mount(root2, component) {
+        function mount(root3, component) {
           if (component != null && component.view == null && typeof component !== "function") {
             throw new TypeError("m.mount expects a component, not a vnode.");
           }
-          var index = subscriptions.indexOf(root2);
+          var index = subscriptions.indexOf(root3);
           if (index >= 0) {
             subscriptions.splice(index, 2);
             if (index <= offset) offset -= 2;
-            render(root2, []);
+            render(root3, []);
           }
           if (component != null) {
-            subscriptions.push(root2, component);
-            render(root2, Vnode(component), redraw);
+            subscriptions.push(root3, component);
+            render(root3, Vnode(component), redraw);
           }
         }
         return { mount, redraw };
@@ -1017,9 +1017,9 @@
         var path = template.slice(0, pathEnd);
         var query = {};
         Object.assign(query, params);
-        var resolved = path.replace(/:([^\/\.-]+)(\.{3})?/g, function(m3, key, variadic) {
+        var resolved = path.replace(/:([^\/\.-]+)(\.{3})?/g, function(m4, key, variadic) {
           delete query[key];
-          if (params[key] == null) return m3;
+          if (params[key] == null) return m4;
           return variadic ? params[key] : encodeURIComponent(String(params[key]));
         });
         var newQueryIndex = resolved.indexOf("?");
@@ -1291,8 +1291,8 @@
           // don't also accidentally escape `-` and make it harder to detect it to
           // ban it from template parameters.
           /:([^\/.-]+)(\.{3}|\.(?!\.)|-)?|[\\^$*+.()|\[\]{}]/g,
-          function(m3, key, extra) {
-            if (key == null) return "\\" + m3;
+          function(m4, key, extra) {
+            if (key == null) return "\\" + m4;
             keys.push({ k: key, r: extra === "..." });
             if (extra === "...") return "(.*)";
             if (extra === ".") return "([^/]+)\\.";
@@ -1346,7 +1346,7 @@
     "node_modules/mithril/api/router.js"(exports, module) {
       "use strict";
       var Vnode = require_vnode();
-      var m3 = require_hyperscript();
+      var m4 = require_hyperscript();
       var buildPathname = require_build2();
       var parsePathname = require_parse2();
       var compileTemplate = require_compileTemplate();
@@ -1455,8 +1455,8 @@
             $window.location.href = route.prefix + path;
           }
         }
-        function route(root2, defaultRoute, routes) {
-          if (!root2) throw new TypeError("DOM element being rendered to does not exist.");
+        function route(root3, defaultRoute, routes) {
+          if (!root3) throw new TypeError("DOM element being rendered to does not exist.");
           compiled = Object.keys(routes).map(function(route2) {
             if (route2[0] !== "/") throw new SyntaxError("Routes must start with a '/'.");
             if (/:([^\/\.-]+)(\.{3})?:/.test(route2)) {
@@ -1483,7 +1483,7 @@
             $window.addEventListener("hashchange", resolveRoute, false);
           }
           ready = true;
-          mountRedraw.mount(root2, RouterRoot);
+          mountRedraw.mount(root3, RouterRoot);
           resolveRoute();
         }
         route.set = function(path, data, options) {
@@ -1500,7 +1500,7 @@
         route.prefix = "#!";
         route.Link = {
           view: function(vnode) {
-            var child = m3(
+            var child = m4(
               vnode.attrs.selector || "a",
               censor(vnode.attrs, ["options", "params", "selector", "onclick"]),
               vnode.children
@@ -1563,31 +1563,31 @@
       var request = require_request2();
       var mountRedraw = require_mount_redraw2();
       var domFor = require_domFor();
-      var m3 = function m4() {
+      var m4 = function m5() {
         return hyperscript.apply(this, arguments);
       };
-      m3.m = hyperscript;
-      m3.trust = hyperscript.trust;
-      m3.fragment = hyperscript.fragment;
-      m3.Fragment = "[";
-      m3.mount = mountRedraw.mount;
-      m3.route = require_route();
-      m3.render = require_render2();
-      m3.redraw = mountRedraw.redraw;
-      m3.request = request.request;
-      m3.parseQueryString = require_parse();
-      m3.buildQueryString = require_build();
-      m3.parsePathname = require_parse2();
-      m3.buildPathname = require_build2();
-      m3.vnode = require_vnode();
-      m3.censor = require_censor();
-      m3.domFor = domFor.domFor;
-      module.exports = m3;
+      m4.m = hyperscript;
+      m4.trust = hyperscript.trust;
+      m4.fragment = hyperscript.fragment;
+      m4.Fragment = "[";
+      m4.mount = mountRedraw.mount;
+      m4.route = require_route();
+      m4.render = require_render2();
+      m4.redraw = mountRedraw.redraw;
+      m4.request = request.request;
+      m4.parseQueryString = require_parse();
+      m4.buildQueryString = require_build();
+      m4.parsePathname = require_parse2();
+      m4.buildPathname = require_build2();
+      m4.vnode = require_vnode();
+      m4.censor = require_censor();
+      m4.domFor = domFor.domFor;
+      module.exports = m4;
     }
   });
 
   // build/index.js
-  var import_mithril2 = __toESM(require_mithril());
+  var import_mithril3 = __toESM(require_mithril());
 
   // build/playerClass.js
   var import_mithril = __toESM(require_mithril());
@@ -1599,6 +1599,7 @@
       this.north = north;
       this.scared = scared;
     }
+    //Game functions
     reset() {
       this.key = false;
       this.oil = false;
@@ -1660,264 +1661,248 @@
     }
   };
 
-  // build/index.js
+  // build/mapClass.js
+  var import_mithril2 = __toESM(require_mithril());
   var root = document.body;
-  var user = new Player(false, false, false, true, false);
-  var start = {
-    view: function() {
+  var Map = class {
+    constructor(user2) {
+      this.user = user2;
+    }
+    start() {
       return (0, import_mithril2.default)("div", { class: "startBox" }, [
         (0, import_mithril2.default)("h1", { class: "title" }, "\u2190Attention!\u291B"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Click on a door to go to the next room \u2666"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Click on the button at the bottom to turn around in the current room \u2666"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Be careful not to get lost \u2666"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 And don't forget: Keep the lights on. \u2666"),
-        (0, import_mithril2.default)("button", { class: "startButton", onclick: function() {
-          user.reset();
-          user.goThroughDoor("white");
-        } }, "Start Game")
+        (0, import_mithril2.default)("button", {
+          class: "startButton",
+          onclick: () => this.startGame()
+        }, "Start Game")
       ]);
     }
-  };
-  var gameOver = {
-    view: function() {
+    startGame() {
+      this.user.reset();
+      this.user.goThroughDoor("white");
+      root.removeAttribute("ID");
+    }
+    gameOver() {
       return (0, import_mithril2.default)("div", { class: "endBox" }, [
         (0, import_mithril2.default)("h1", { class: "title" }, "\u291CYou-died\u2192"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 I warned you \u2666"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 Happy? \u2666"),
-        (0, import_mithril2.default)("button", { class: "restartButton", onclick: function() {
-          import_mithril2.default.route.set("start");
-        } }, "No.")
+        (0, import_mithril2.default)("button", { class: "restartButton", onclick: () => this.user.goThroughDoor("start") }, "No.")
       ]);
     }
-  };
-  var darkness = {
-    view: function() {
-      user.changeScared();
+    darkness() {
+      this.user.changeScared();
       setTimeout(() => {
-        if (import_mithril2.default.route.get() === "darkness") {
-          import_mithril2.default.route.set("gameOver");
+        if (import_mithril2.default.route.get() === "/darkness") {
+          this.user.goThroughDoor("gameOver");
         }
         console.log(import_mithril2.default.route.get());
       }, 1e4);
       return (0, import_mithril2.default)("div", { class: "darkness" }, (0, import_mithril2.default)("div", { class: "abyss" }, [
-        (0, import_mithril2.default)("button", { class: "hiddenSwitch", onclick: function() {
+        (0, import_mithril2.default)("button", { class: "hiddenSwitch", onclick: () => {
           root.removeAttribute("ID");
-          import_mithril2.default.route.set("darkRed");
+          this.user.goThroughDoor("darkRed");
         } }),
         (0, import_mithril2.default)("div", { class: "warning" }, "It's coming...")
       ]));
     }
-  };
-  var goodEnd = {
-    view: function() {
+    goodEnd() {
       return (0, import_mithril2.default)("div", { class: "startBox" }, [
         (0, import_mithril2.default)("h1", { class: "title" }, "\u291CGame-Over!\u2192"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 You barricade the door \u2666"),
         (0, import_mithril2.default)("p", { class: "description" }, "\u2666 No one will be able to turn the lights off now \u2666"),
-        (0, import_mithril2.default)("button", { class: "restartButton", onclick: function() {
-          import_mithril2.default.route.set("start");
+        (0, import_mithril2.default)("button", { class: "restartButton", onclick: () => {
+          this.user.goThroughDoor("start");
         } }, "Good.")
       ]);
     }
-  };
-  var white = {
-    view: function() {
-      if (user.getNorth()) {
+    white() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "white" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("lightRed");
+              onclick: () => {
+                this.user.goThroughDoor("lightRed");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("lightBlue");
+              onclick: () => {
+                this.user.goThroughDoor("lightBlue");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("white");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("white");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "white" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("darkPurple");
+            onclick: () => {
+              this.user.goThroughDoor("darkPurple");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("white");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("white");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var black = {
-    view: function() {
-      if (user.getNorth()) {
+    black() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
             class: "lockedDoor",
-            onclick: function() {
-              user.checkDoor();
+            onclick: () => {
+              this.user.checkDoor();
             }
           }, "-"), ""),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("black");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("black");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("red");
+            onclick: () => {
+              this.user.goThroughDoor("red");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("black");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("black");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var blackNoKey = {
-    view: function() {
+    blackNoKey() {
       return [
         (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
           class: "lockedDoor",
-          onclick: function() {
-            user.checkDoor();
+          onclick: () => {
+            this.user.checkDoor();
           }
         }, "-")),
         (0, import_mithril2.default)("div", { class: "locked" }, "It's locked"),
-        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-          user.turnAroundTo("black");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+          this.user.turnAroundTo("black");
         } }, "Turn South"))
       ];
     }
-  };
-  var blackNoOil = {
-    view: function() {
+    blackNoOil() {
       return [
         (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", {
           class: "lockedDoor",
-          onclick: function() {
-            user.checkDoor();
+          onclick: () => {
+            this.user.checkDoor();
           }
         }, "-")),
         (0, import_mithril2.default)("div", { class: "locked" }, "Rusted. It won't open like this"),
-        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-          user.turnAroundTo("black");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+          this.user.turnAroundTo("black");
         } }, "Turn South"))
       ];
     }
-  };
-  var blackToolSet = {
-    view: function() {
+    blackToolSet() {
       return [
         (0, import_mithril2.default)("div", { class: "black" }, (0, import_mithril2.default)("button", { class: "lockedDoor" }, "-")),
         (0, import_mithril2.default)("div", { class: "toolBox" }, [
           (0, import_mithril2.default)("p", "Do you want to use the Tool Kit?"),
-          (0, import_mithril2.default)("div", { class: "buttonBox" }, (0, import_mithril2.default)("button", { class: "choice", onclick: function() {
-            import_mithril2.default.route.set("/goodEnd");
-          } }, "Yes"), (0, import_mithril2.default)("button", { class: "choice", onclick: function() {
-            user.changeToolKit();
-            user.goThroughDoor("black");
+          (0, import_mithril2.default)("div", { class: "buttonBox" }, (0, import_mithril2.default)("button", { class: "choice", onclick: () => {
+            this.user.goThroughDoor("goodEnd");
+          } }, "Yes"), (0, import_mithril2.default)("button", { class: "choice", onclick: () => {
+            this.user.changeToolKit();
+            this.user.goThroughDoor("black");
           } }, "No"))
         ])
       ];
     }
-  };
-  var blue = {
-    view: function() {
-      if (user.getNorth()) {
+    blue() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "blue" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("darkBlue");
+            onclick: () => {
+              this.user.goThroughDoor("darkBlue");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("blue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("blue");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "blue" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("lightBlue");
+            onclick: () => {
+              this.user.goThroughDoor("lightBlue");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("blue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("blue");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var lightBlue = {
-    view: function() {
-      if (user.getNorth()) {
+    lightBlue() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "lightBlue" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("purple");
+              onclick: () => {
+                this.user.goThroughDoor("purple");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("blue");
+              onclick: () => {
+                this.user.goThroughDoor("blue");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("lightBlue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("lightBlue");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "lightBlue" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("white");
+            onclick: () => {
+              this.user.goThroughDoor("white");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("lightBlue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("lightBlue");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var darkBlue = {
-    view: function() {
-      if (user.getNorth()) {
-        if (user.getKey()) {
-          return (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("darkBlue");
+    darkBlue() {
+      if (this.user.getNorth()) {
+        if (this.user.getKey()) {
+          return (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("darkBlue");
           } }, "Turn South"));
         } else {
           return [
             (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("button", {
               class: "item",
-              onclick: function() {
-                user.changeKey();
+              onclick: () => {
+                this.user.changeKey();
                 import_mithril2.default.route.set("darkBlueObtained");
               }
             }, "\u{1F511}")),
-            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-              user.turnAroundTo("darkBlue");
+            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+              this.user.turnAroundTo("darkBlue");
             } }, "Turn South"))
           ];
         }
@@ -1926,229 +1911,213 @@
           (0, import_mithril2.default)("div", { class: "darkBlue" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("blue");
+              onclick: () => {
+                this.user.goThroughDoor("blue");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("purple");
+              onclick: () => {
+                this.user.goThroughDoor("purple");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("darkBlue");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("darkBlue");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var darkBlueObtained = {
-    view: function() {
+    darkBlueObtained() {
       return [
         (0, import_mithril2.default)("div", { class: "darkBlue" }, (0, import_mithril2.default)("div", { class: "locked" }, "You found a key!")),
-        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-          user.turnAroundTo("darkBlue");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+          this.user.turnAroundTo("darkBlue");
         } }, "Turn South"))
       ];
     }
-  };
-  var red = {
-    view: function() {
-      if (user.getNorth()) {
+    red() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "red" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("black");
+              onclick: () => {
+                this.user.goThroughDoor("black");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("yellow");
+              onclick: () => {
+                this.user.goThroughDoor("yellow");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("red");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("red");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "red" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("lightRed");
+            onclick: () => {
+              this.user.goThroughDoor("lightRed");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("red");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("red");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var lightRed = {
-    view: function() {
-      if (user.getNorth()) {
+    lightRed() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "lightRed" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("red");
+              onclick: () => {
+                this.user.goThroughDoor("red");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("lightPurple");
+              onclick: () => {
+                this.user.goThroughDoor("lightPurple");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("lightRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("lightRed");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "lightRed" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("white");
+            onclick: () => {
+              this.user.goThroughDoor("white");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("lightRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("lightRed");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var darkRed = {
-    view: function() {
+    darkRed() {
       let text;
-      if (user.getScared()) {
+      if (this.user.getScared()) {
         text = "Find the Toolkit.";
       } else {
         text = "Are you sure about this?";
       }
-      if (user.getNorth()) {
+      if (this.user.getNorth()) {
         return [
-          (0, import_mithril2.default)("div", { class: "darkRed" }, (0, import_mithril2.default)("button", { class: "switch", onclick: function() {
-            console.log("click");
+          (0, import_mithril2.default)("div", { class: "darkRed" }, (0, import_mithril2.default)("button", { class: "switch", onclick: () => {
             root.setAttribute("ID", "lightsOff");
-            console.log("you turned the lights off");
-            import_mithril2.default.route.set("darkness");
+            this.user.goThroughDoor("darkness");
           } }, ""), text),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("darkRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("darkRed");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "darkRed" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("black");
+            onclick: () => {
+              this.user.goThroughDoor("black");
             }
           })),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("darkRed");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("darkRed");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var purple = {
-    view: function() {
-      if (user.getNorth()) {
+    purple() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "purple" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("darkPurple");
+              onclick: () => {
+                this.user.goThroughDoor("darkPurple");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("darkBlue");
+              onclick: () => {
+                this.user.goThroughDoor("darkBlue");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("purple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("purple");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "purple" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("lightBlue");
+            onclick: () => {
+              this.user.goThroughDoor("lightBlue");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("purple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("purple");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var lightPurple = {
-    view: function() {
-      if (user.getNorth()) {
+    lightPurple() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "lightPurple" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("yellow");
+              onclick: () => {
+                this.user.goThroughDoor("yellow");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("darkPurple");
+              onclick: () => {
+                this.user.goThroughDoor("darkPurple");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("lightPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("lightPurple");
           } }, "Turn South"))
         ];
       } else {
         return [
           (0, import_mithril2.default)("div", { class: "lightPurple" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("lightRed");
+            onclick: () => {
+              this.user.goThroughDoor("lightRed");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("lightPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("lightPurple");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var darkPurple = {
-    view: function() {
-      if (user.getNorth()) {
+    darkPurple() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "darkPurple" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("white");
+            onclick: () => {
+              this.user.goThroughDoor("white");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("darkPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("darkPurple");
           } }, "Turn South"))
         ];
       } else {
@@ -2156,50 +2125,48 @@
           (0, import_mithril2.default)("div", { class: "darkPurple" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("purple");
+              onclick: () => {
+                this.user.goThroughDoor("purple");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("lightPurple");
+              onclick: () => {
+                this.user.goThroughDoor("lightPurple");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("yellow");
+              onclick: () => {
+                this.user.goThroughDoor("yellow");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("darkPurple");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("darkPurple");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var yellow = {
-    view: function() {
-      if (user.getNorth()) {
+    yellow() {
+      if (this.user.getNorth()) {
         return [
           (0, import_mithril2.default)("div", { class: "yellow" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("orange");
+              onclick: () => {
+                this.user.goThroughDoor("orange");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("darkPurple");
+              onclick: () => {
+                this.user.goThroughDoor("darkPurple");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("yellow");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("yellow");
           } }, "Turn South"))
         ];
       } else {
@@ -2207,50 +2174,48 @@
           (0, import_mithril2.default)("div", { class: "yellow" }, [
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("lightPurple");
+              onclick: () => {
+                this.user.goThroughDoor("lightPurple");
               }
             }, "-"),
             (0, import_mithril2.default)("button", {
               class: "door",
-              onclick: function() {
-                user.goThroughDoor("red");
+              onclick: () => {
+                this.user.goThroughDoor("red");
               }
             }, "-")
           ]),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("yellow");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("yellow");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var orange = {
-    view: function() {
-      if (user.getNorth()) {
-        if (user.getOil()) {
+    orange() {
+      if (this.user.getNorth()) {
+        if (this.user.getOil()) {
           return [
-            (0, import_mithril2.default)("div", { class: "orange" }, (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-              user.turnAroundTo("orange");
+            (0, import_mithril2.default)("div", { class: "orange" }, (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+              this.user.turnAroundTo("orange");
             } }, "Turn South")),
             (0, import_mithril2.default)("div", { class: "hide" }, (0, import_mithril2.default)("button", {
               class: "door",
               id: "hiddenPassage",
-              onclick: function() {
-                user.goThroughDoor("green");
+              onclick: () => {
+                this.user.goThroughDoor("green");
               }
             }))
           ];
         } else {
           return [
             (0, import_mithril2.default)("div", { class: "orange" }, [
-              (0, import_mithril2.default)("button", { class: "tool", onclick: function() {
-                user.changeOil();
-                import_mithril2.default.route.set("orangeObtained");
+              (0, import_mithril2.default)("button", { class: "tool", onclick: () => {
+                this.user.changeOil();
+                this.user.goThroughDoor("orangeObtained");
               } }, "\u{1F6E2}\uFE0F")
             ]),
-            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-              user.turnAroundTo("orange");
+            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+              this.user.turnAroundTo("orange");
             } }, "Turn South"))
           ];
         }
@@ -2258,46 +2223,42 @@
         return [
           (0, import_mithril2.default)("div", { class: "orange" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("yellow");
+            onclick: () => {
+              this.user.goThroughDoor("yellow");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("orange");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("orange");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var orangeObtained = {
-    view: function() {
+    orangeObtained() {
       return [
         (0, import_mithril2.default)("div", { class: "orange" }, [
           (0, import_mithril2.default)("div", { class: "locked" }, "You found some Oil!")
         ]),
-        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-          user.turnAroundTo("orange");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+          this.user.turnAroundTo("orange");
         } }, "Turn South"))
       ];
     }
-  };
-  var green = {
-    view: function() {
-      if (user.getNorth()) {
-        if (user.getToolKit()) {
-          return (0, import_mithril2.default)("div", { class: "green" }, (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("green");
+    green() {
+      if (this.user.getNorth()) {
+        if (this.user.getToolKit()) {
+          return (0, import_mithril2.default)("div", { class: "green" }, (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("green");
           } }, "Turn South"));
         } else {
           return [
             (0, import_mithril2.default)("div", { class: "green" }, [
-              (0, import_mithril2.default)("button", { class: "tool", onclick: function() {
-                user.changeToolKit();
-                import_mithril2.default.route.set("greenObtained");
+              (0, import_mithril2.default)("button", { class: "tool", onclick: () => {
+                this.user.changeToolKit();
+                this.user.goThroughDoor("greenObtained");
               } }, "\u{1F6E0}")
             ]),
-            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-              user.turnAroundTo("green");
+            (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+              this.user.turnAroundTo("green");
             } }, "Turn South"))
           ];
         }
@@ -2305,30 +2266,105 @@
         return [
           (0, import_mithril2.default)("div", { class: "green" }, (0, import_mithril2.default)("button", {
             class: "door",
-            onclick: function() {
-              user.goThroughDoor("orange");
+            onclick: () => {
+              this.user.goThroughDoor("orange");
             }
           }, "-")),
-          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-            user.turnAroundTo("green");
+          (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+            this.user.turnAroundTo("green");
           } }, "Turn North"))
         ];
       }
     }
-  };
-  var greenObtained = {
-    view: function() {
+    greenObtained() {
       return [
         (0, import_mithril2.default)("div", { class: "green" }, [
           (0, import_mithril2.default)("div", { class: "locked" }, "You found a Toolkit!")
         ]),
-        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: function() {
-          user.turnAroundTo("green");
+        (0, import_mithril2.default)("div", (0, import_mithril2.default)("button", { class: "turn", onclick: () => {
+          this.user.turnAroundTo("green");
         } }, "Turn South"))
       ];
     }
   };
-  import_mithril2.default.route(root, "/start", {
+
+  // build/index.js
+  var root2 = document.body;
+  var user = new Player(false, false, false, true, false);
+  var map = new Map(user);
+  var start = { view: function() {
+    return map.start();
+  } };
+  var gameOver = { view: function() {
+    return map.gameOver();
+  } };
+  var darkness = { view: function() {
+    return map.darkness();
+  } };
+  var goodEnd = { view: function() {
+    return map.goodEnd();
+  } };
+  var white = { view: function() {
+    return map.white();
+  } };
+  var black = { view: function() {
+    return map.black();
+  } };
+  var blackNoKey = { view: function() {
+    return map.blackNoKey();
+  } };
+  var blackNoOil = { view: function() {
+    return map.blackNoOil();
+  } };
+  var blackToolSet = { view: function() {
+    return map.blackToolSet();
+  } };
+  var blue = { view: function() {
+    return map.blue();
+  } };
+  var lightBlue = { view: function() {
+    return map.lightBlue();
+  } };
+  var darkBlue = { view: function() {
+    return map.darkBlue();
+  } };
+  var darkBlueObtained = { view: function() {
+    return map.darkBlueObtained();
+  } };
+  var red = { view: function() {
+    return map.red();
+  } };
+  var lightRed = { view: function() {
+    return map.lightRed();
+  } };
+  var darkRed = { view: function() {
+    return map.darkRed();
+  } };
+  var purple = { view: function() {
+    return map.purple();
+  } };
+  var lightPurple = { view: function() {
+    return map.lightPurple();
+  } };
+  var darkPurple = { view: function() {
+    return map.darkPurple();
+  } };
+  var yellow = { view: function() {
+    return map.yellow();
+  } };
+  var orange = { view: function() {
+    return map.orange();
+  } };
+  var orangeObtained = { view: function() {
+    return map.orangeObtained();
+  } };
+  var green = { view: function() {
+    return map.green();
+  } };
+  var greenObtained = { view: function() {
+    return map.greenObtained();
+  } };
+  import_mithril3.default.route(root2, "/start", {
     "/start": start,
     "/gameOver": gameOver,
     "/goodEnd": goodEnd,

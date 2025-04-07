@@ -1,0 +1,31 @@
+import m from "mithril";
+import { Player } from "./playerClass";
+export declare class Map {
+    readonly user: Player;
+    constructor(user: Player);
+    start(): m.Vnode<any, any>;
+    startGame(): void;
+    gameOver(): m.Vnode<any, any>;
+    darkness(): m.Vnode<any, any>;
+    goodEnd(): m.Vnode<any, any>;
+    white(): m.Vnode<any, any>[];
+    black(): m.Vnode<any, any>[];
+    blackNoKey(): m.Vnode<any, any>[];
+    blackNoOil(): m.Vnode<any, any>[];
+    blackToolSet(): m.Vnode<any, any>[];
+    blue(): m.Vnode<any, any>[];
+    lightBlue(): m.Vnode<any, any>[];
+    darkBlue(): m.Vnode<any, any> | m.Vnode<any, any>[];
+    darkBlueObtained(): m.Vnode<any, any>[];
+    red(): m.Vnode<any, any>[];
+    lightRed(): m.Vnode<any, any>[];
+    darkRed(): m.Vnode<any, any>[];
+    purple(): m.Vnode<any, any>[];
+    lightPurple(): m.Vnode<any, any>[];
+    darkPurple(): m.Vnode<any, any>[];
+    yellow(): m.Vnode<any, any>[];
+    orange(): m.Vnode<any, any>[];
+    orangeObtained(): m.Vnode<any, any>[];
+    green(): m.Vnode<any, any> | m.Vnode<any, any>[];
+    greenObtained(): m.Vnode<any, any>[];
+}
