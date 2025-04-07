@@ -24,7 +24,7 @@ let blackNoKey = {view: () => {return map.blackNoKey()}};
 
 let blackNoOil = {view: () => {return map.blackNoOil()}};
 
-let blackToolSet = {view: () => {return map.blackToolSet()}};
+let blackToolKit = {view: () => {return map.blackToolKit()}};
 
 let blue = {view: () => {return map.blue()}};
 
@@ -65,7 +65,7 @@ m.route(root,"/start", {
     "/black":black,
     "/blackNoKey":blackNoKey,
     "/blackNoOil":blackNoOil,
-    "/blackToolSet":blackToolSet,
+    "/blackToolKit":blackToolKit,
     "/blue":blue,
     "/lightBlue":lightBlue,
     "/darkBlue":darkBlue,

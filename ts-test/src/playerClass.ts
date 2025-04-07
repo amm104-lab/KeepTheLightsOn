@@ -11,10 +11,10 @@ export class Player{
     private north:Boolean;
     private scared:Boolean;
 
-    constructor(key:Boolean, oil:Boolean, toolSet:Boolean, north:Boolean, scared:Boolean) {
+    constructor(key:Boolean, oil:Boolean, toolKit:Boolean, north:Boolean, scared:Boolean) {
         this.key = key;
         this.oil = oil;
-        this.toolKit = toolSet;
+        this.toolKit = toolKit;
         this.north = north;
         this.scared = scared;
     }
@@ -40,7 +40,7 @@ export class Player{
 
     checkDoor(){
         if(this.getToolKit()){
-            this.goThroughDoor("blackToolSet")
+            this.goThroughDoor("blackToolKit")
         }
         else{
             if(this.getKey() && this.getOil()){

@@ -129,7 +129,7 @@ export class Map{
             )]
     }
 
-    blackToolSet(){
+    blackToolKit(){
         return [m("div",{class:"black"},
             m("button", {class:"lockedDoor"}, "-")),
             m("div",{class:"toolBox"},[
